@@ -30,8 +30,8 @@ void solve2(long long n){
 }
 int main()
 {
-    long long N;
-    solve2(N);
-    cin>>N;
-    return 0;
+    stack<pair<int,int>> st;
+
+    st.push({73, 0});
+    cout<<st.top().second<<endl;
 }
