@@ -3,7 +3,7 @@ using namespace std;
 
 class DisjointSet
 {
-    vector<int> rank, parent;
+    vector<int> rank, parent, size;
 
 public:
     DisjointSet(int n)
@@ -15,6 +15,7 @@ public:
         {
             parent[i] = i;
         }
+        size.resize(n+1, 1);
     }
     int findUParent(int node){
         if(node == parent[node])
@@ -40,22 +41,38 @@ public:
             rank[ultp_u]++;
         }
     }
+
+    void unionBySize(int u, int v){
+        int ultp_u = findUParent(u);
+        int ultp_v = findUParent(v);
+
+        if(ultp_u == ultp_v) return;
+
+        if(size[ultp_u] < size[ultp_v]){
+            parent[ultp_u] = ultp_v;
+            size[ultp_v] += size[ultp_u];
+        }
+        else{
+            parent[ultp_v] = ultp_u;
+            size[ultp_u] += size[ultp_v];
+        }
+    }
 };
 
 int main()
 {
     DisjointSet ds(7);
-    ds.unionByRank(1, 2);
-    ds.unionByRank(2, 3);
-    ds.unionByRank(4, 5);
-    ds.unionByRank(6, 7);
-    ds.unionByRank(5, 6);
+    ds.unionBySize(1, 2);
+    ds.unionBySize(2, 3);
+    ds.unionBySize(4, 5);
+    ds.unionBySize(6, 7);
+    ds.unionBySize(5, 6);
     // check if 1 and 7 belongs to same component
     if(ds.findUParent(1) == ds.findUParent(7))
         cout<<"YES\n";
     else cout<<"NO\n";
 
-    ds.unionByRank(3, 7);
+    ds.unionBySize(3, 7);
     if(ds.findUParent(1) == ds.findUParent(7))
         cout<<"YES\n";
     else cout<<"NO\n";
